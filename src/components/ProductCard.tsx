@@ -1,0 +1,134 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  pricePerMl?: number;
+  description: string;
+  images: string[];
+  category: "regular" | "print" | "perfume";
+  badge?: string;
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export const ProductCard = ({ product }: ProductCardProps) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === product.images.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? product.images.length - 1 : prev - 1
+    );
+  };
+
+  const handleOrder = () => {
+    navigate("/order", { 
+      state: { 
+        product: {
+          ...product,
+          currentImage: product.images[currentImageIndex]
+        }
+      } 
+    });
+  };
+
+  return (
+    <Card className="group hover-lift animate-fade-in shadow-card">
+      <CardHeader className="p-0">
+        <div className="relative overflow-hidden rounded-t-lg">
+          <img
+            src={product.images[currentImageIndex]}
+            alt={product.name}
+            className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          
+          {product.images.length > 1 && (
+            <>
+              <Button
+                variant="secondary"
+                size="icon"
+                className="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={prevImage}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="secondary"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={nextImage}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                {product.images.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentImageIndex ? "bg-white" : "bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          
+          {product.badge && (
+            <Badge className="absolute top-2 left-2 gradient-accent text-white">
+              {product.badge}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors">
+          {product.name}
+        </h3>
+        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+          {product.description}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <div className="text-2xl font-bold text-primary">
+            {product.category === "perfume" ? (
+              <span className="text-lg">
+                {product.pricePerMl}₽ <span className="text-sm text-muted-foreground">за мл</span>
+              </span>
+            ) : (
+              `${product.price}₽`
+            )}
+          </div>
+        </div>
+      </CardContent>
+      
+      <CardFooter className="p-4 pt-0">
+        <Button 
+          variant={product.category === "perfume" ? "premium" : "order"}
+          size="lg"
+          className="w-full"
+          onClick={handleOrder}
+        >
+          <ShoppingCart className="h-4 w-4" />
+          {product.category === "perfume" ? "Выбрать объем" : "Заказать"}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+};
