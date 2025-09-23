@@ -46,7 +46,12 @@
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
     --gradient-subtle: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--background)));
-    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(182 91% 67%) 100%);
+    --gradient-hero-start: linear-gradient(135deg, hsl(262 83% 58%), hsl(182 91% 67%));
+    --gradient-hero-end: linear-gradient(135deg, hsl(182 91% 67%), hsl(280 80% 60%));
+
+    /* Dark gradients */
+    --gradient-dark-start: linear-gradient(135deg, hsl(260 60% 20%), hsl(180 50% 15%));
+    --gradient-dark-end: linear-gradient(135deg, hsl(180 50% 15%), hsl(280 40% 25%));
 
     /* Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
@@ -135,10 +140,31 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--gradient-hero);
+    background: var(--gradient-hero-start);
     background-size: 200% 200%;
-    animation: gradient-move 16s ease-in-out infinite;
+    animation: gradient-move 16s ease-in-out infinite, gradient-colors 12s ease-in-out infinite alternate;
+    z-index: -2;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
     z-index: -1;
+    pointer-events: none;
+  }
+
+  .dark body::before {
+    background: var(--gradient-dark-start);
+    animation: gradient-move 16s ease-in-out infinite, gradient-colors-dark 12s ease-in-out infinite alternate;
+  }
+
+  .dark body::after {
+    background: rgba(0, 0, 0, 0.85);
   }
 }
 
@@ -170,7 +196,11 @@
   }
   
   .gradient-hero {
-    background: var(--gradient-hero);
+    background: var(--gradient-hero-start);
+  }
+
+  .dark .gradient-hero {
+    background: var(--gradient-dark-start);
   }
 
   /* Apply smooth animated gradient movement to any gradient background */
@@ -232,5 +262,23 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes gradient-colors {
+  0% {
+    background: var(--gradient-hero-start);
+  }
+  100% {
+    background: var(--gradient-hero-end);
+  }
+}
+
+@keyframes gradient-colors-dark {
+  0% {
+    background: var(--gradient-dark-start);
+  }
+  100% {
+    background: var(--gradient-dark-end);
   }
 }
