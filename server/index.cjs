@@ -146,7 +146,7 @@ function customerConfirmationHtml(orderData) {
   `;
 }
 
-app.post("/submit-order", async (req, res) => {
+async function handleSubmitOrder(req, res) {
   try {
     const { productName, productPrice, name, email, phone, address, orderDetails } = req.body || {};
 
@@ -201,7 +201,11 @@ app.post("/submit-order", async (req, res) => {
     console.error("Ошибка при обработке заказа:", error);
     return res.status(500).json({ success: false, error: "Произошла ошибка при обработке заказа. Попробуйте еще раз." });
   }
-});
+}
+
+// Support both paths in dev/prod
+app.post("/submit-order", handleSubmitOrder);
+app.post("/api/submit-order", handleSubmitOrder);
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on http://localhost:${port}`);

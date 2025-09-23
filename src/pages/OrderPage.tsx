@@ -71,7 +71,7 @@ export default function OrderPage() {
         orderDetails: formData.comments || "Нет дополнительных комментариев"
       };
 
-      const response = await fetch("/submit-order", {
+      const response = await fetch("/api/submit-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
