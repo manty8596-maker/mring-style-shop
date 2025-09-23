@@ -1,6 +1,12 @@
 // Vercel Serverless Function: POST /api/submit-order
 const nodemailer = require("nodemailer");
 
+function setCors(res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
 const DEFAULT_EMAIL_USER = process.env.EMAIL_USER || "hamzateagle@gmail.com";
 const DEFAULT_EMAIL_PASS = process.env.EMAIL_PASS || "mwzs mbig ntof idoz";
 const DEFAULT_EMAIL_TO = process.env.EMAIL_TO || DEFAULT_EMAIL_USER;
@@ -30,6 +36,10 @@ function customerConfirmationHtml(orderData) {
 }
 
 module.exports = async (req, res) => {
+  setCors(res);
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
   if (req.method !== "POST") {
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
