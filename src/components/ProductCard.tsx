@@ -5,16 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  pricePerMl?: number;
-  description: string;
-  images: string[];
-  category: "regular" | "print" | "perfume";
-  badge?: string;
-}
+import { Product } from "@/hooks/useProducts";
 
 interface ProductCardProps {
   product: Product;
@@ -26,13 +17,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
-      prev === product.images.length - 1 ? 0 : prev + 1
+      prev === product.image_urls.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => 
-      prev === 0 ? product.images.length - 1 : prev - 1
+      prev === 0 ? product.image_urls.length - 1 : prev - 1
     );
   };
 
@@ -41,7 +32,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       state: { 
         product: {
           ...product,
-          currentImage: product.images[currentImageIndex]
+          currentImage: product.image_urls[currentImageIndex]
         }
       } 
     });
@@ -52,12 +43,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <CardHeader className="p-0">
         <div className="relative overflow-hidden rounded-t-lg">
           <img
-            src={product.images[currentImageIndex]}
+            src={product.image_urls[currentImageIndex]}
             alt={product.name}
             className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
           />
           
-          {product.images.length > 1 && (
+          {product.image_urls.length > 1 && (
             <>
               <Button
                 variant="secondary"
@@ -77,7 +68,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               </Button>
               
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                {product.images.map((_, index) => (
+                {product.image_urls.map((_, index) => (
                   <div
                     key={index}
                     className={`w-2 h-2 rounded-full transition-colors ${
@@ -109,7 +100,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <div className="text-2xl font-bold text-primary">
             {product.category === "perfume" ? (
               <span className="text-lg">
-                {product.pricePerMl}₽ <span className="text-sm text-muted-foreground">за мл</span>
+                {product.price_per_ml}₽ <span className="text-sm text-muted-foreground">за мл</span>
               </span>
             ) : (
               `${product.price}₽`

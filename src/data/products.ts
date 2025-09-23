@@ -1,4 +1,4 @@
-import { Product } from "@/components/ProductCard";
+import { Product } from "@/hooks/useProducts";
 import hoodieImage from "@/assets/hoodie-black.jpg";
 import tshirtImage from "@/assets/tshirt-print.jpg";
 import perfumeImage from "@/assets/perfume-luxury.jpg";
@@ -9,7 +9,7 @@ export const regularClothing: Product[] = [
     name: "Черное худи Premium",
     price: 3500,
     description: "Стильное черное худи из премиального хлопка. Идеально для повседневной носки и создания модных образов.",
-    images: [hoodieImage],
+    image_urls: [hoodieImage],
     category: "regular",
     badge: "Хит продаж"
   },
@@ -18,7 +18,7 @@ export const regularClothing: Product[] = [
     name: "Классические джинсы",
     price: 2800,
     description: "Универсальные джинсы прямого кроя из качественного денима. Подходят для любого стиля.",
-    images: [hoodieImage], // Временно используем то же изображение
+    image_urls: [hoodieImage], // Временно используем то же изображение
     category: "regular"
   },
   {
@@ -26,7 +26,7 @@ export const regularClothing: Product[] = [
     name: "Бомбер куртка",
     price: 4200,
     description: "Модная куртка-бомбер с контрастными вставками. Отличное дополнение к спортивному образу.",
-    images: [hoodieImage],
+    image_urls: [hoodieImage],
     category: "regular",
     badge: "Новинка"
   }
@@ -38,7 +38,7 @@ export const printClothing: Product[] = [
     name: "Футболка с геометрическим принтом",
     price: 2100,
     description: "Яркая футболка с авторским геометрическим принтом. Высококачественная печать на премиальном материале.",
-    images: [tshirtImage],
+    image_urls: [tshirtImage],
     category: "print",
     badge: "Авторский дизайн"
   },
@@ -47,7 +47,7 @@ export const printClothing: Product[] = [
     name: "Худи с принтом граффити",
     price: 3800,
     description: "Уникальное худи с ярким принтом в стиле граффити. Каждый принт наносится вручную.",
-    images: [tshirtImage],
+    image_urls: [tshirtImage],
     category: "print",
     badge: "Лимитированная серия"
   },
@@ -56,7 +56,7 @@ export const printClothing: Product[] = [
     name: "Свитшот абстрактный принт",
     price: 3200,
     description: "Стильный свитшот с абстрактным художественным принтом. Идеален для творческих личностей.",
-    images: [tshirtImage],
+    image_urls: [tshirtImage],
     category: "print"
   }
 ];
@@ -65,30 +65,30 @@ export const perfumes: Product[] = [
   {
     id: "perfume-luxury-gold",
     name: "Luxury Gold",
-    pricePerMl: 85,
+    price_per_ml: 85,
     price: 0, // Будет рассчитываться динамически
     description: "Роскошный аромат с нотами золотистого янтаря, ванили и драгоценных пород дерева. Идеален для особых случаев.",
-    images: [perfumeImage],
+    image_urls: [perfumeImage],
     category: "perfume",
     badge: "Премиум"
   },
   {
     id: "perfume-ocean-breeze",
     name: "Ocean Breeze",
-    pricePerMl: 68,
+    price_per_ml: 68,
     price: 0,
     description: "Свежий морской аромат с нотами цитрусов, морской соли и белых цветов. Освежает и бодрит.",
-    images: [perfumeImage],
+    image_urls: [perfumeImage],
     category: "perfume",
     badge: "Бестселлер"
   },
   {
     id: "perfume-midnight-rose",
     name: "Midnight Rose",
-    pricePerMl: 92,
+    price_per_ml: 92,
     price: 0,
     description: "Таинственный вечерний аромат с глубокими нотами темной розы, пачули и черной смородины.",
-    images: [perfumeImage],
+    image_urls: [perfumeImage],
     category: "perfume"
   }
 ];

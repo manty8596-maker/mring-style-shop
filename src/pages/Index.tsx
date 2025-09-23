@@ -1,10 +1,32 @@
 import { CategorySection } from "@/components/CategorySection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { regularClothing, printClothing, perfumes } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 import { Sparkles, Shirt, Palette, Heart } from "lucide-react";
 
 const Index = () => {
+  const { products, loading, error, getProductsByCategory } = useProducts();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Загрузка товаров...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-destructive">{error}</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -39,7 +61,7 @@ const Index = () => {
       <CategorySection
         title="Базовая коллекция"
         description="Классическая одежда премиального качества для создания идеального гардероба"
-        products={regularClothing}
+        products={getProductsByCategory('regular')}
         className="bg-muted/30"
       />
 
@@ -47,14 +69,14 @@ const Index = () => {
       <CategorySection
         title="Принты и дизайн"
         description="Уникальные авторские принты, которые выделят вас из толпы. Каждый принт создается с любовью к деталям"
-        products={printClothing}
+        products={getProductsByCategory('print')}
       />
 
       {/* Perfumes Section */}
       <CategorySection
         title="Ароматы"
         description="Эксклюзивные парфюмерные композиции для завершения вашего неповторимого образа"
-        products={perfumes}
+        products={getProductsByCategory('perfume')}
         className="bg-muted/30"
       />
 

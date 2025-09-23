@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, ShoppingBag, Phone, Mail, MapPin, MessageSquare, Plus, Minus } from "lucide-react";
-import { Product } from "@/components/ProductCard";
+import { Product } from "@/hooks/useProducts";
 
 export default function OrderPage() {
   const location = useLocation();
@@ -49,7 +49,7 @@ export default function OrderPage() {
   };
 
   const calculatePerfumePrice = () => {
-    return product.pricePerMl ? product.pricePerMl * mlAmount : 0;
+    return product.price_per_ml ? product.price_per_ml * mlAmount : 0;
   };
 
   const finalPrice = product.category === "perfume" ? calculatePerfumePrice() : product.price;
@@ -125,7 +125,7 @@ export default function OrderPage() {
             <CardContent className="space-y-4">
               <div className="relative">
                 <img
-                  src={product.images[0]}
+                  src={product.image_urls[0]}
                   alt={product.name}
                   className="w-full h-48 object-cover rounded-lg shadow-card"
                 />
@@ -165,7 +165,7 @@ export default function OrderPage() {
                     </Button>
                   </div>
                   <p className="text-sm text-center text-muted-foreground mt-2">
-                    {product.pricePerMl}₽ за мл
+                    {product.price_per_ml}₽ за мл
                   </p>
                 </div>
               )}

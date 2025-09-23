@@ -1,4 +1,5 @@
-import { ProductCard, Product } from "@/components/ProductCard";
+import { Product } from "@/hooks/useProducts";
+import { ProductCard } from "@/components/ProductCard";
 
 interface CategorySectionProps {
   title: string;
