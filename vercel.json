@@ -5,6 +5,7 @@
     { "src": "api/submit-order.js", "use": "@vercel/node" }
   ],
   "routes": [
+    { "handle": "filesystem" },
     { "src": "/submit-order", "dest": "/api/submit-order" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
