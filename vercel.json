@@ -6,6 +6,8 @@
   ],
   "routes": [
     { "handle": "filesystem" },
+    { "src": "^/api/submit-order$", "dest": "/api/submit-order" },
+    { "src": "^/api/(.*)$", "dest": "/api/$1" },
     { "src": "/submit-order", "dest": "/api/submit-order" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
