@@ -3,9 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useProducts } from "@/hooks/useProducts";
 import { Sparkles, Shirt, Palette, Heart } from "lucide-react";
+import { useRef } from "react";
 
 const Index = () => {
   const { products, loading, error, getProductsByCategory } = useProducts();
+  // Hooks must be called unconditionally and before any early returns
+  const catalogRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToCatalog = () => {
+    catalogRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   if (loading) {
     return (
@@ -28,12 +35,16 @@ const Index = () => {
     );
   }
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 gradient-hero opacity-10"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="animate-fade-in">
+            <div className="flex justify-center mb-6">
+              <div className="h-24 w-24 md:h-28 md:w-28 rounded-full bg-black/80 ring-2 ring-white/40 shadow-glow flex items-center justify-center overflow-hidden">
+                <img src="/logo.png" alt="MR.ING" className="h-full w-full object-cover" />
+              </div>
+            </div>
             <Badge className="gradient-accent text-white mb-4 text-sm px-4 py-2">
               ✨ MR.ING - Индивидуальная одежда с принтами
             </Badge>
@@ -44,20 +55,19 @@ const Index = () => {
               Создаем уникальную одежду с авторскими принтами и предлагаем эксклюзивные ароматы для вашего образа
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="gradient" size="xl" className="animate-glow">
+              <Button variant="gradient" size="xl" className="animate-glow" onClick={scrollToCatalog}>
                 <Sparkles className="h-5 w-5" />
                 Смотреть каталог
               </Button>
-              <Button variant="outline" size="xl">
-                <Heart className="h-5 w-5" />
-                О нас
-              </Button>
+            
             </div>
           </div>
         </div>
       </section>
 
       {/* Regular Clothing Section */}
+      <div ref={catalogRef} />
+
       <CategorySection
         title="Базовая коллекция"
         description="Классическая одежда премиального качества для создания идеального гардероба"
