@@ -38,10 +38,14 @@ function customerConfirmationText(orderData) {
 export default async function handler(req, res) {
   setCors(res);
   if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method === "GET") return res.status(200).json({ success: true, message: "submit-order alive" });
   if (req.method !== "POST") return res.status(405).json({ success: false, error: "Method not allowed" });
 
   try {
-    const { productName, productPrice, name, email, phone, address, orderDetails } = req.body || {};
+    // On some platforms body can be a string; try to parse
+    const rawBody = req.body;
+    const body = typeof rawBody === "string" ? JSON.parse(rawBody || "{}") : (rawBody || {});
+    const { productName, productPrice, name, email, phone, address, orderDetails } = body;
     if (!productName || !productPrice || !name || !email || !phone || !address) {
       return res.status(400).json({ success: false, error: "Пожалуйста, заполните все обязательные поля" });
     }
