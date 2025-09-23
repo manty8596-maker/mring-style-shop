@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "vite.config.ts", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
+    { "src": "api/submit-order.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/submit-order", "dest": "/api/submit-order" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
+
+
