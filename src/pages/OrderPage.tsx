@@ -71,7 +71,11 @@ export default function OrderPage() {
         orderDetails: formData.comments || "Нет дополнительных комментариев"
       };
 
-      const response = await fetch("/api/submit-order", {
+      const apiUrl = import.meta.env.VITE_API_URL 
+        ? `${import.meta.env.VITE_API_URL}/api/submit-order`
+        : 'https://mringbec.vercel.app/api/submit-order';
+        
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
