@@ -30,7 +30,15 @@ const PrintClothingPage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen gradient-bg-ocean">
+      {/* Floating particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-4 h-4 bg-white/20 rounded-full floating"></div>
+        <div className="absolute top-20 right-20 w-6 h-6 bg-white/30 rounded-full floating-reverse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-20 left-20 w-3 h-3 bg-white/25 rounded-full floating" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-10 right-10 w-5 h-5 bg-white/20 rounded-full floating-reverse" style={{animationDelay: '3s'}}></div>
+      </div>
+      
       {/* Header */}
       <section className="relative py-16 overflow-hidden bg-muted/30">
         <div className="container mx-auto px-4">
@@ -52,10 +60,10 @@ const PrintClothingPage = () => {
             <Badge className="gradient-accent text-white mb-4 text-sm px-4 py-2">
               🎨 Авторские принты
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-primary bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-primary bg-clip-text text-transparent neon-glow bounce-in">
               Принты и дизайн
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto slide-in-left">
               Уникальные авторские принты, которые выделят вас из толпы. Каждый принт создается с любовью к деталям и вниманием к трендам.
             </p>
           </div>
@@ -63,12 +71,19 @@ const PrintClothingPage = () => {
       </section>
 
       {/* Products Section */}
-      <CategorySection
-        title="Принты и дизайн"
-        description="Уникальные авторские принты, которые выделят вас из толпы. Каждый принт создается с любовью к деталям"
-        products={getProductsByCategory('print')}
-        className="py-16"
-      />
+      <div className="relative">
+        {/* Morphing background shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 morphing" style={{animationDelay: '0s'}}></div>
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/5 morphing" style={{animationDelay: '2s'}}></div>
+        </div>
+        <CategorySection
+          title="Принты и дизайн"
+          description="Уникальные авторские принты, которые выделят вас из толпы. Каждый принт создается с любовью к деталям"
+          products={getProductsByCategory('print')}
+          className="py-16 relative z-10"
+        />
+      </div>
 
       {/* Footer */}
       <footer className="bg-foreground text-background py-12">

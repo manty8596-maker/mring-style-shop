@@ -38,7 +38,16 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-20 overflow-hidden gradient-bg-hero">
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-10 left-10 w-4 h-4 bg-white/20 rounded-full floating"></div>
+          <div className="absolute top-20 right-20 w-6 h-6 bg-white/30 rounded-full floating-reverse" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-20 left-20 w-3 h-3 bg-white/25 rounded-full floating" style={{animationDelay: '2s'}}></div>
+          <div className="absolute bottom-10 right-10 w-5 h-5 bg-white/20 rounded-full floating-reverse" style={{animationDelay: '3s'}}></div>
+          <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/40 rounded-full floating" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-1/3 right-1/3 w-4 h-4 bg-white/15 rounded-full floating-reverse" style={{animationDelay: '5s'}}></div>
+        </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="animate-fade-in">
             <div className="flex justify-center mb-6">
@@ -49,15 +58,15 @@ const Index = () => {
             <Badge className="gradient-accent text-white mb-4 text-sm px-4 py-2">
               ✨ MR.ING - Индивидуальная одежда с принтами
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 gradient-hero bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 gradient-hero bg-clip-text text-transparent neon-glow bounce-in">
               Стиль без границ
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 slide-in-left">
               Создаем уникальную одежду с авторскими принтами и предлагаем эксклюзивные ароматы для вашего образа
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="gradient" size="xl" className="animate-glow" onClick={scrollToCatalog}>
-                <Sparkles className="h-5 w-5" />
+              <Button variant="gradient" size="xl" className="animate-glow pulse-glow shimmer slide-in-right" onClick={scrollToCatalog}>
+                <Sparkles className="h-5 w-5 rotate-scale" />
                 Смотреть каталог
               </Button>
             
@@ -69,7 +78,13 @@ const Index = () => {
       {/* Categories Overview */}
       <div ref={catalogRef} />
       
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 gradient-bg-aurora relative overflow-hidden">
+        {/* Morphing background shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 morphing" style={{animationDelay: '0s'}}></div>
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/5 morphing" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/8 morphing" style={{animationDelay: '4s'}}></div>
+        </div>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 animate-slide-up">
             <h2 className="text-4xl font-bold mb-4 gradient-primary bg-clip-text text-transparent">
@@ -82,7 +97,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Regular Clothing Card */}
-            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative overflow-hidden rounded-2xl bg-background/80 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bounce-in glass">
               <div className="p-8 text-center">
                 <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Shirt className="h-8 w-8 text-primary" />
@@ -101,7 +116,7 @@ const Index = () => {
             </div>
 
             {/* Print Clothing Card */}
-            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative overflow-hidden rounded-2xl bg-background/80 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bounce-in glass" style={{animationDelay: '0.2s'}}>
               <div className="p-8 text-center">
                 <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Palette className="h-8 w-8 text-primary" />
@@ -120,7 +135,7 @@ const Index = () => {
             </div>
 
             {/* Perfumes Card */}
-            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative overflow-hidden rounded-2xl bg-background/80 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bounce-in glass" style={{animationDelay: '0.4s'}}>
               <div className="p-8 text-center">
                 <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Sparkles className="h-8 w-8 text-primary" />

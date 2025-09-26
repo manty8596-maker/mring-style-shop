@@ -136,9 +136,14 @@ export default function OrderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8 relative">
-      {/* Gradient background overlay */}
-      <div className="fixed inset-0 gradient-bg-primary opacity-5 pointer-events-none"></div>
+    <div className="min-h-screen bg-background py-8 relative gradient-bg-magic">
+      {/* Floating particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-3 h-3 bg-white/20 rounded-full floating"></div>
+        <div className="absolute top-40 right-20 w-4 h-4 bg-white/30 rounded-full floating-reverse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-40 left-20 w-2 h-2 bg-white/25 rounded-full floating" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-20 right-10 w-5 h-5 bg-white/20 rounded-full floating-reverse" style={{animationDelay: '3s'}}></div>
+      </div>
       
       {showEmailVerification && (
         <EmailVerification
