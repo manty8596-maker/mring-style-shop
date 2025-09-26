@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    proxy: {
+    proxy: mode === "development" ? {
       "/submit-order": {
         target: `http://localhost:${process.env.SERVER_PORT || 3000}`,
         changeOrigin: true,
@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         secure: false,
       },
-    },
+    } : {},
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
