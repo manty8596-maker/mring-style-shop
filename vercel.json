@@ -1,15 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "outputDirectory": "dist",
   "builds": [
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
     { "src": "api/submit-order.mjs", "use": "@vercel/node" }
   ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "^/api/submit-order$", "dest": "/api/submit-order" },
-    { "src": "^/api/(.*)$", "dest": "/api/$1" },
-    { "src": "/submit-order", "dest": "/api/submit-order" },
+    { "src": "/api/submit-order", "dest": "/api/submit-order" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
