@@ -2,8 +2,9 @@ import { CategorySection } from "@/components/CategorySection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useProducts } from "@/hooks/useProducts";
-import { Sparkles, Shirt, Palette, Heart } from "lucide-react";
+import { Sparkles, Shirt, Palette, Heart, ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { products, loading, error, getProductsByCategory } = useProducts();
@@ -65,30 +66,80 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Regular Clothing Section */}
+      {/* Categories Overview */}
       <div ref={catalogRef} />
+      
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 animate-slide-up">
+            <h2 className="text-4xl font-bold mb-4 gradient-primary bg-clip-text text-transparent">
+              Наши категории
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Выберите категорию, которая подходит вашему стилю
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Regular Clothing Card */}
+            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="p-8 text-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Shirt className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Базовая коллекция</h3>
+                <p className="text-muted-foreground mb-6">
+                  Классическая одежда премиального качества для создания идеального гардероба
+                </p>
+                <Link to="/regular">
+                  <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Смотреть товары
+                    <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
 
-      <CategorySection
-        title="Базовая коллекция"
-        description="Классическая одежда премиального качества для создания идеального гардероба"
-        products={getProductsByCategory('regular')}
-        className="bg-muted/30"
-      />
+            {/* Print Clothing Card */}
+            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="p-8 text-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Palette className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Принты и дизайн</h3>
+                <p className="text-muted-foreground mb-6">
+                  Уникальные авторские принты, которые выделят вас из толпы
+                </p>
+                <Link to="/print">
+                  <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Смотреть товары
+                    <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
 
-      {/* Print Clothing Section */}
-      <CategorySection
-        title="Принты и дизайн"
-        description="Уникальные авторские принты, которые выделят вас из толпы. Каждый принт создается с любовью к деталям"
-        products={getProductsByCategory('print')}
-      />
-
-      {/* Perfumes Section */}
-      <CategorySection
-        title="Ароматы"
-        description="Эксклюзивные парфюмерные композиции для завершения вашего неповторимого образа"
-        products={getProductsByCategory('perfume')}
-        className="bg-muted/30"
-      />
+            {/* Perfumes Card */}
+            <div className="group relative overflow-hidden rounded-2xl bg-background border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="p-8 text-center">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Sparkles className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Ароматы</h3>
+                <p className="text-muted-foreground mb-6">
+                  Эксклюзивные парфюмерные композиции для завершения вашего образа
+                </p>
+                <Link to="/perfume">
+                  <Button variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Смотреть товары
+                    <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-foreground text-background py-12">
@@ -105,18 +156,18 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4">Категории</h4>
               <div className="space-y-2 text-background/80">
-                <div className="flex items-center gap-2">
+                <Link to="/regular" className="flex items-center gap-2 hover:text-background transition-colors">
                   <Shirt className="h-4 w-4" />
                   <span>Базовая одежда</span>
-                </div>
-                <div className="flex items-center gap-2">
+                </Link>
+                <Link to="/print" className="flex items-center gap-2 hover:text-background transition-colors">
                   <Palette className="h-4 w-4" />
                   <span>Принты и дизайн</span>
-                </div>
-                <div className="flex items-center gap-2">
+                </Link>
+                <Link to="/perfume" className="flex items-center gap-2 hover:text-background transition-colors">
                   <Sparkles className="h-4 w-4" />
                   <span>Ароматы</span>
-                </div>
+                </Link>
               </div>
             </div>
             <div>
