@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, ShoppingBag, Phone, Mail, MapPin, MessageSquare, Plus, Minus } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Phone, Mail, MapPin, MessageSquare, Plus, Minus, Shield } from "lucide-react";
 import { Product } from "@/hooks/useProducts";
+import { EmailVerification } from "@/components/EmailVerification";
 
 export default function OrderPage() {
   const location = useLocation();
@@ -26,6 +27,8 @@ export default function OrderPage() {
 
   const [mlAmount, setMlAmount] = useState(50);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   useEffect(() => {
     if (!product) {
@@ -54,8 +57,35 @@ export default function OrderPage() {
 
   const finalPrice = product.category === "perfume" ? calculatePerfumePrice() : product.price;
 
+  const handleEmailVerification = () => {
+    if (!formData.email) {
+      toast({
+        title: "❌ Ошибка",
+        description: "Пожалуйста, введите email адрес",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowEmailVerification(true);
+  };
+
+  const handleEmailVerified = () => {
+    setIsEmailVerified(true);
+    setShowEmailVerification(false);
+    toast({
+      title: "✅ Email подтвержден",
+      description: "Теперь вы можете оформить заказ",
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isEmailVerified) {
+      handleEmailVerification();
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -106,7 +136,17 @@ export default function OrderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-background py-8 relative">
+      {/* Gradient background overlay */}
+      <div className="fixed inset-0 gradient-bg-primary opacity-5 pointer-events-none"></div>
+      
+      {showEmailVerification && (
+        <EmailVerification
+          email={formData.email}
+          onVerified={handleEmailVerified}
+          onCancel={() => setShowEmailVerification(false)}
+        />
+      )}
       <div className="container mx-auto px-4 max-w-4xl">
         <Button
           variant="ghost"
@@ -271,7 +311,16 @@ export default function OrderPage() {
                   className="w-full mt-6"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Оформляем заказ..." : "Оформить заказ"}
+                  {isSubmitting ? (
+                    "Оформляем заказ..."
+                  ) : !isEmailVerified ? (
+                    <>
+                      <Shield className="h-4 w-4 mr-2" />
+                      Подтвердить email и заказать за {finalPrice}₽
+                    </>
+                  ) : (
+                    `Оформить заказ за ${finalPrice}₽`
+                  )}
                 </Button>
               </form>
             </CardContent>
