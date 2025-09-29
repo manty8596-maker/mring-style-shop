@@ -100,6 +100,30 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields
+    if (!formData.name.trim()) {
+      toast.error("Название товара обязательно");
+      return;
+    }
+    
+    if (!formData.description.trim()) {
+      toast.error("Описание товара обязательно");
+      return;
+    }
+    
+    // Validate price based on category
+    if (formData.category === 'perfume') {
+      if (!formData.price_per_ml || isNaN(parseFloat(formData.price_per_ml))) {
+        toast.error("Цена за мл обязательна для парфюмерии");
+        return;
+      }
+    } else {
+      if (!formData.price || isNaN(parseFloat(formData.price))) {
+        toast.error("Цена товара обязательна");
+        return;
+      }
+    }
+    
     let imageUrls = [...formData.image_urls];
     
     if (formData.imageFiles.length > 0) {
@@ -108,12 +132,12 @@ export default function AdminPage() {
     }
     
     const productData = {
-      name: formData.name,
-      price: parseFloat(formData.price),
-      price_per_ml: formData.price_per_ml ? parseFloat(formData.price_per_ml) : null,
-      description: formData.description,
+      name: formData.name.trim(),
+      price: formData.category === 'perfume' ? 0 : parseFloat(formData.price),
+      price_per_ml: formData.category === 'perfume' ? parseFloat(formData.price_per_ml) : null,
+      description: formData.description.trim(),
       category: formData.category,
-      badge: formData.badge || null,
+      badge: formData.badge?.trim() || null,
       image_urls: imageUrls
     };
 
@@ -304,9 +328,11 @@ export default function AdminPage() {
                         id="price"
                         type="number"
                         step="0.01"
+                        min="0"
                         value={formData.price}
                         onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
                         disabled={formData.category === 'perfume'}
+                        required={formData.category !== 'perfume'}
                       />
                     </div>
 
@@ -317,6 +343,7 @@ export default function AdminPage() {
                           id="price_per_ml"
                           type="number"
                           step="0.01"
+                          min="0"
                           value={formData.price_per_ml}
                           onChange={(e) => setFormData(prev => ({ ...prev, price_per_ml: e.target.value }))}
                           required
