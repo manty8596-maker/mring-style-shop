@@ -1,4 +1,4 @@
-// Vercel Serverless Function (ESM): POST /api/submit-order
+// Vercel Serverless Function (ESM): POST /api/send-verification
 import nodemailer from "nodemailer";
 
 function setCors(res) {
@@ -9,83 +9,76 @@ function setCors(res) {
 
 const DEFAULT_EMAIL_USER = process.env.EMAIL_USER || "hamzateagle@gmail.com";
 const DEFAULT_EMAIL_PASS = process.env.EMAIL_PASS || "mwzs mbig ntof idoz";
-const DEFAULT_EMAIL_TO = process.env.EMAIL_TO || DEFAULT_EMAIL_USER;
 
 function createTransporter() {
   const { SMTP_HOST, SMTP_PORT, SMTP_SECURE } = process.env;
   if (SMTP_HOST && DEFAULT_EMAIL_USER && DEFAULT_EMAIL_PASS) {
-    return nodemailer.createTransport({
+    return nodemailer.createTransporter({
       host: SMTP_HOST,
       port: Number(SMTP_PORT || 587),
       secure: String(SMTP_SECURE || "false").toLowerCase() === "true",
       auth: { user: DEFAULT_EMAIL_USER, pass: DEFAULT_EMAIL_PASS },
     });
   }
-  return nodemailer.createTransport({
+  return nodemailer.createTransporter({
     service: "gmail",
     auth: { user: DEFAULT_EMAIL_USER, pass: DEFAULT_EMAIL_PASS },
   });
 }
 
-function ownerNotificationText(orderData) {
-  return `Новый заказ: ${orderData.productName} — ${orderData.productPrice}.\nПокупатель: ${orderData.name}, ${orderData.phone}, ${orderData.email}.\nАдрес: ${orderData.address}.\nДетали: ${orderData.orderDetails}`;
+function generateVerificationCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-function customerConfirmationText(orderData) {
-  return `Ваш заказ принят: ${orderData.productName} — ${orderData.productPrice}. Мы свяжемся в ближайшее время.`;
-}
+// In-memory storage for verification codes (in production, use Redis or database)
+const verificationCodes = new Map();
 
 export default async function handler(req, res) {
   setCors(res);
   if (req.method === "OPTIONS") return res.status(200).end();
-  if (req.method === "GET") return res.status(200).json({ success: true, message: "submit-order alive" });
+  if (req.method === "GET") return res.status(200).json({ success: true, message: "send-verification alive" });
   if (req.method !== "POST") return res.status(405).json({ success: false, error: "Method not allowed" });
 
   try {
-    // On some platforms body can be a string; try to parse
     const rawBody = req.body;
     const body = typeof rawBody === "string" ? JSON.parse(rawBody || "{}") : (rawBody || {});
-    const { productName, productPrice, name, email, phone, address, orderDetails } = body;
-    if (!productName || !productPrice || !name || !email || !phone || !address) {
-      return res.status(400).json({ success: false, error: "Пожалуйста, заполните все обязательные поля" });
+    const { email } = body;
+    
+    if (!email) {
+      return res.status(400).json({ success: false, error: "Email адрес обязателен" });
     }
 
-    const orderData = {
-      productName,
-      productPrice,
-      name,
-      email,
-      phone,
-      address,
-      orderDetails: orderDetails || "Нет дополнительных комментариев",
-    };
+    const code = generateVerificationCode();
+    verificationCodes.set(email, { code, timestamp: Date.now() });
 
     const transporter = createTransporter();
 
-    const [ownerResult, customerResult] = await Promise.all([
-      transporter.sendMail({
-        from: `"MR.ING" <${DEFAULT_EMAIL_USER}>`,
-        to: DEFAULT_EMAIL_TO,
-        subject: "Новый заказ MR.ING",
-        text: ownerNotificationText(orderData),
-      }),
-      transporter.sendMail({
-        from: `"MR.ING" <${DEFAULT_EMAIL_USER}>`,
-        to: orderData.email,
-        subject: "✅ Ваш заказ в обработке - MR.ING",
-        text: customerConfirmationText(orderData),
-      }),
-    ]);
+    const result = await transporter.sendMail({
+      from: `"MR.ING" <${DEFAULT_EMAIL_USER}>`,
+      to: email,
+      subject: "🔐 Код подтверждения - MR.ING",
+      text: `Ваш код подтверждения: ${code}\n\nКод действителен в течение 10 минут.\n\nЕсли вы не запрашивали этот код, проигнорируйте это письмо.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #333; text-align: center;">🔐 Код подтверждения</h2>
+          <p style="font-size: 16px; color: #666;">Ваш код подтверждения для MR.ING:</p>
+          <div style="background: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0; border-radius: 8px;">
+            <span style="font-size: 32px; font-weight: bold; color: #7c3aed; letter-spacing: 4px;">${code}</span>
+          </div>
+          <p style="font-size: 14px; color: #999;">Код действителен в течение 10 минут.</p>
+          <p style="font-size: 14px; color: #999;">Если вы не запрашивали этот код, проигнорируйте это письмо.</p>
+        </div>
+      `
+    });
 
-    if (ownerResult.accepted.length === 0 || customerResult.accepted.length === 0) {
-      console.warn("Some emails were not accepted by SMTP server");
+    if (result.accepted.length === 0) {
+      console.warn("Verification email was not accepted by SMTP server");
+      return res.status(500).json({ success: false, error: "Не удалось отправить код подтверждения" });
     }
 
-    return res.status(200).json({ success: true, message: "Заказ успешно оформлен! Письма отправлены." });
+    return res.status(200).json({ success: true, message: "Код подтверждения отправлен на вашу почту" });
   } catch (error) {
-    console.error("submit-order error:", error);
-    return res.status(500).json({ success: false, error: "Ошибка при обработке заказа" });
+    console.error("send-verification error:", error);
+    return res.status(500).json({ success: false, error: "Ошибка при отправке кода подтверждения" });
   }
 }
-
-
