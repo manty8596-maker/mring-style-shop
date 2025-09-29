@@ -27,6 +27,40 @@ export const EmailVerification = ({ email, onVerified, onCancel }: EmailVerifica
     }
   }, [timeLeft]);
 
+  // Automatically send verification code when component mounts
+  useEffect(() => {
+    const sendInitialCode = async () => {
+      setIsResending(true);
+      setError("");
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://mringbec.vercel.app'}/api/send-verification`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          setTimeLeft(60);
+          setSuccess(true);
+          setTimeout(() => setSuccess(false), 3000);
+        } else {
+          setError(result.error || "Ошибка при отправке кода");
+        }
+      } catch (error) {
+        setError("Ошибка при отправке кода. Попробуйте еще раз.");
+      } finally {
+        setIsResending(false);
+      }
+    };
+
+    sendInitialCode();
+  }, [email]);
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);

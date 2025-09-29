@@ -81,7 +81,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
           
           {product.badge && (
-            <Badge className="absolute top-2 left-2 gradient-accent text-white">
+            <Badge className="absolute top-2 right-2 gradient-accent text-white z-10 text-xs px-2 py-1 max-w-[80px] truncate">
               {product.badge}
             </Badge>
           )}
@@ -89,7 +89,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </CardHeader>
       
       <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors pr-20">
           {product.name}
         </h3>
         <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
